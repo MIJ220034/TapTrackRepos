@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: html(content=~{::section})}">
+<body>
+<section>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Mein Profil</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">Kontoinformationen</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label text-muted">Benutzername</label>
+                        <p class="fw-bold" th:text="${user.username}">username</p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted">E-Mail Adresse</label>
+                        <p class="fw-bold" th:text="${user.email}">email@example.com</p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted">Vorname</label>
+                        <p class="fw-bold" th:text="${user.firstName ?: '-'}">Vorname</p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted">Nachname</label>
+                        <p class="fw-bold" th:text="${user.lastName ?: '-'}">Nachname</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="card-title mb-0">Gefahrenzone</h5>
+                </div>
+                <div class="card-body">
+                    <p>Möchten Sie Ihr Konto dauerhaft löschen? Alle Ihre Daten, Projekte und Zeiteinträge werden unwiderruflich entfernt.</p>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                        Konto löschen
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Konto wirklich löschen?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Sind Sie sicher, dass Sie Ihr Konto löschen möchten? Dieser Vorgang kann nicht rückgängig gemacht werden.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+                    <form th:action="@{/profile/delete}" method="post">
+                        <button type="submit" class="btn btn-danger">Konto endgültig löschen</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

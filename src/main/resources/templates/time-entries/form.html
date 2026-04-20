@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: html(content=~{::section})}">
+<body>
+<section>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2" th:text="${entry.id == null ? 'Neue Arbeitszeit' : 'Arbeitszeit bearbeiten'}">Zeiterfassung</h1>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+            <form th:action="@{/time-entries/save}" th:object="${entry}" method="post">
+                <input type="hidden" th:field="*{id}">
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="project" class="form-label fw-bold">Projekt</label>
+                        <select id="project" th:field="*{projectId}" class="form-select shadow-sm" required>
+                            <option value="" disabled selected>Projekt wählen...</option>
+                            <option th:each="proj : ${projects}" th:value="${proj.id}" th:text="${proj.name}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="date" class="form-label fw-bold">Datum</label>
+                        <input type="date" id="date" th:field="*{date}" class="form-control shadow-sm" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="startTime" class="form-label fw-bold">Startzeit</label>
+                        <input type="time" id="startTime" th:field="*{startTime}" class="form-control shadow-sm" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="endTime" class="form-label fw-bold">Endzeit</label>
+                        <input type="time" id="endTime" th:field="*{endTime}" class="form-control shadow-sm">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="projectPhase" class="form-label fw-bold">Projektphase</label>
+                        <input type="text" id="projectPhase" th:field="*{projectPhase}" class="form-control shadow-sm" placeholder="z.B. Analyse, Design, Implementierung">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="workArea" class="form-label fw-bold">Arbeitsbereich</label>
+                        <input type="text" id="workArea" th:field="*{workArea}" class="form-control shadow-sm" placeholder="z.B. Frontend, Backend, Dokumentation">
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="description" class="form-label fw-bold">Beschreibung</label>
+                    <textarea id="description" th:field="*{description}" class="form-control shadow-sm" rows="4" placeholder="Was hast du gemacht?"></textarea>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <a th:href="@{/dashboard}" class="btn btn-light rounded-pill px-4">Abbrechen</a>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 shadow-sm">
+                        <i class="bi bi-check-lg me-1"></i> Speichern
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+</body>
+</html>

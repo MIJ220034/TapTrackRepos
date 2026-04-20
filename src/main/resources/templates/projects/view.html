@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: html(content=~{::section})}">
+<body>
+<section>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2" th:text="${project.name}">Projekt Details</h1>
+        <div>
+            <a th:href="@{/time-entries/create(projectId=${project.id})}" class="btn btn-primary">Zeit für dieses Projekt erfassen</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="card h-100 shadow-sm border-0 bg-primary text-white">
+                        <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                            <h6 class="text-uppercase mb-2">Gesamtarbeitszeit</h6>
+                            <h2 class="display-4 fw-bold mb-0" th:text="${#numbers.formatDecimal(project.totalDuration, 1, 2) + ' h'}">0.00 h</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100 shadow-sm border-0">
+                        <div class="card-body">
+                            <h6 class="text-muted text-uppercase mb-3">Projekt Info</h6>
+                            <p class="mb-1"><strong>Mitglieder:</strong> <span th:text="${project.users.size()}">0</span></p>
+                            <p class="mb-0"><strong>Einträge:</strong> <span th:text="${project.timeEntries.size()}">0</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h5>Beschreibung</h5>
+                    <p th:text="${project.description}">Keine Beschreibung vorhanden.</p>
+                </div>
+            </div>
+            
+            <div class="card shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Detaillierte Arbeitszeiten</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                            <tr>
+                                <th>Datum</th>
+                                <th>Benutzer</th>
+                                <th>Bereich / Phase</th>
+                                <th>Zeit</th>
+                                <th class="text-end">Dauer</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="entry : ${project.timeEntries}">
+                                <td>
+                                    <span class="fw-bold" th:text="${#temporals.format(entry.date, 'dd.MM.yyyy')}">01.01.2023</span><br>
+                                    <small class="text-muted" th:text="'KW ' + ${entry.calendarWeek}">KW 1</small>
+                                </td>
+                                <td>
+                                    <span th:text="${entry.user.firstName + ' ' + entry.user.lastName}">Name</span><br>
+                                    <small class="text-muted" th:text="${entry.user.username}">user</small>
+                                </td>
+                                <td>
+                                    <span class="badge bg-info text-dark" th:text="${entry.workArea}">Bereich</span><br>
+                                    <small class="text-muted" th:text="${entry.projectPhase}">Phase</small>
+                                </td>
+                                <td>
+                                    <span th:text="${entry.startTime} + ' - ' + ${entry.endTime}">08:00 - 10:00</span>
+                                </td>
+                                <td class="text-end fw-bold">
+                                    <span th:text="${entry.duration != null ? #numbers.formatDecimal(entry.duration, 1, 2) + ' h' : '-'}">0.00 h</span>
+                                </td>
+                            </tr>
+                            <tr th:if="${project.timeEntries.empty}">
+                                <td colspan="5" class="text-center p-4 text-muted">Noch keine Zeitbuchungen für dieses Projekt vorhanden.</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h5 class="mb-0">Projektmitglieder</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex align-items-center" th:each="member : ${project.users}">
+                            <i class="bi bi-person-circle me-2 fs-5"></i>
+                            <span th:text="${member.firstName + ' ' + member.lastName + ' (' + member.username + ')'}">Name</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
